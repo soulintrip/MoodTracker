@@ -1,7 +1,7 @@
 {
-  "name": "Слои дня",
-  "short_name": "Слои дня",
-  "description": "Дневник дел по слоям: рутина, обязательное, приятное",
+  "name": "Day Layers",
+  "short_name": "Day Layers",
+  "description": "Activity log by layers: routine, obligations, enjoyable",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
