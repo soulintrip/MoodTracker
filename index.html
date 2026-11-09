@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Слои дня">
+<meta name="apple-mobile-web-app-title" content="Day Layers">
 <meta name="theme-color" content="#faf9f5">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icon-180.png">
-<title>Слои дня</title>
+<title>Day Layers</title>
 <style>
 :root{--bg:#faf9f5;--fg:#1f1e1d;--mut:#6b6a66;--bd:#d9d7cf;--card:#fff;--err:#b3261e;
 --b1:#dbe9f8;--f1:#0c447c;--b2:#fbe6d3;--f2:#8a3d0c;--b3:#dcefc9;--f3:#27500a}
@@ -51,97 +51,101 @@ input[type=text]{width:100%;font:inherit;font-size:16px;color:var(--fg);backgrou
 <body>
 
 <div class="top">
-<h1>Слои дня</h1>
-<button id="openHelp">Шпаргалка</button>
+<h1>Day Layers</h1>
+<button id="openHelp">Guide</button>
 </div>
 
 <div class="card">
-<p class="h">Добавить дело</p>
-<div class="lbl">Слой</div>
+<p class="h">Add activity</p>
+<div class="lbl">Layer</div>
 <div class="seg" id="layer"></div>
-<div class="lbl">Дело</div>
-<input type="text" id="name" placeholder="Например, прогулка 15 минут">
+<div class="lbl">Activity</div>
+<input type="text" id="name" placeholder="For example, 15-minute walk">
 <div class="g2">
-<div><div class="lbl">Настроение до</div><div class="seg" id="mb"></div></div>
-<div><div class="lbl">Настроение после</div><div class="seg" id="ma"></div></div>
-<div><div class="lbl">Удовольствие</div><div class="seg" id="p"></div></div>
-<div><div class="lbl">Значимость</div><div class="seg" id="s"></div></div>
+<div><div class="lbl">Mood before</div><div class="seg" id="mb"></div></div>
+<div><div class="lbl">Mood after</div><div class="seg" id="ma"></div></div>
+<div><div class="lbl">Pleasure</div><div class="seg" id="p"></div></div>
+<div><div class="lbl">Importance</div><div class="seg" id="s"></div></div>
 </div>
-<div class="lbl">Статус</div>
+<div class="lbl">Status</div>
 <div class="seg" id="done"></div>
 <div class="err" id="err"></div>
-<button id="add" style="width:100%">Записать</button>
+<button id="add" style="width:100%">Save</button>
 </div>
 
 <div class="card">
-<p class="h">Сегодня</p>
+<p class="h">Today</p>
 <div id="list"></div>
 </div>
 
 <div class="card">
-<p class="h">Сводка за 7 дней</p>
+<p class="h">Last 7 days</p>
 <div id="sum"></div>
 <div class="sm" id="hint" style="margin-top:8px"></div>
 </div>
 
 <div class="card">
-<p class="h">Данные</p>
+<p class="h">Data</p>
 <div class="acts">
-<button id="exp">Экспорт CSV</button>
-<button id="imp">Импорт CSV</button>
+<button id="exp">Export CSV</button>
+<button id="imp">Import CSV</button>
 </div>
 <input type="file" id="file" accept=".csv,text/csv" style="display:none">
-<div class="sm" id="msg" style="margin-top:8px">Данные хранятся только в этом браузере. Делай экспорт раз в неделю как резервную копию.</div>
+<div class="sm" id="msg" style="margin-top:8px">Data is stored only in this browser. Export once a week as a backup.</div>
 </div>
 
 <div id="ov"></div>
 <div id="help">
 <div style="display:flex;justify-content:space-between;align-items:center">
-<h1>Шпаргалка по оценкам</h1>
-<button id="closeHelp">Закрыть</button>
+<h1>Rating guide</h1>
+<button id="closeHelp">Close</button>
 </div>
-<p class="sm">Свайп вправо тоже закрывает.</p>
+<p class="sm">Swipe right to close.</p>
 
-<h2>Настроение (до и после)</h2>
-<div class="row"><span class="n">0</span><span>Плохо. Подавленность, апатия, тяжело двигаться или думать.</span></div>
-<div class="row"><span class="n">1</span><span>Скорее плохо. Вялость или тревога, но терпимо.</span></div>
-<div class="row"><span class="n">2</span><span>Нормально. Ровно, без сильного негатива и без подъёма.</span></div>
-<div class="row"><span class="n">3</span><span>Хорошо. Есть энергия, интерес или спокойствие.</span></div>
+<h2>Mood (before and after)</h2>
+<div class="row"><span class="n">0</span><span>Bad. Low, apathetic, hard to move or think.</span></div>
+<div class="row"><span class="n">1</span><span>Rather bad. Sluggish or anxious, but bearable.</span></div>
+<div class="row"><span class="n">2</span><span>Okay. Even, no strong negative and no lift.</span></div>
+<div class="row"><span class="n">3</span><span>Good. Some energy, interest, or calm.</span></div>
 
-<h2>Удовольствие</h2>
-<p class="sm">Оценивай само дело, а не облегчение от того, что закончил.</p>
-<div class="row"><span class="n">0</span><span>Никак или неприятно.</span></div>
-<div class="row"><span class="n">1</span><span>Слегка приятно, можно было и не делать.</span></div>
-<div class="row"><span class="n">2</span><span>Приятно, хотелось продолжить.</span></div>
-<div class="row"><span class="n">3</span><span>Очень. Был полностью в процессе.</span></div>
+<h2>Pleasure</h2>
+<p class="sm">Rate the activity itself, not the relief of finishing it.</p>
+<div class="row"><span class="n">0</span><span>Nothing, or unpleasant.</span></div>
+<div class="row"><span class="n">1</span><span>Slightly pleasant, could have skipped it.</span></div>
+<div class="row"><span class="n">2</span><span>Pleasant, wanted to keep going.</span></div>
+<div class="row"><span class="n">3</span><span>Very. Fully absorbed in it.</span></div>
 
-<h2>Значимость</h2>
-<p class="sm">Вопрос: насколько это было нужно мне самому, независимо от того, понравилось ли.</p>
-<div class="row"><span class="n">0</span><span>Впустую, смысла не видно.</span></div>
-<div class="row"><span class="n">1</span><span>Просто закрыл дело.</span></div>
-<div class="row"><span class="n">2</span><span>Нужное дело.</span></div>
-<div class="row"><span class="n">3</span><span>Важный шаг, есть ощущение достижения.</span></div>
+<h2>Importance</h2>
+<p class="sm">Question: how much did I need this myself, regardless of whether I liked it.</p>
+<div class="row"><span class="n">0</span><span>Wasted, no point.</span></div>
+<div class="row"><span class="n">1</span><span>Just ticked it off.</span></div>
+<div class="row"><span class="n">2</span><span>A needed thing.</span></div>
+<div class="row"><span class="n">3</span><span>An important step, a sense of achievement.</span></div>
 
-<h2>Слои</h2>
-<div class="row"><span><b>Рутина.</b> Ежедневное поддержание тела и дома: еда, душ, сон, уборка, лекарства.</span></div>
-<div class="row"><span><b>Обязательное.</b> Есть внешний срок или человек, которому должен: работа, счета, документы, врач.</span></div>
-<div class="row"><span><b>Приятное.</b> Делаешь ради удовольствия или смысла. Не как награда «после всего».</span></div>
+<h2>Layers</h2>
+<div class="row"><span><b>Routine.</b> Daily upkeep of body and home: food, shower, sleep, cleaning, medication.</span></div>
+<div class="row"><span><b>Obligations.</b> There is an external deadline or someone you owe: work, bills, paperwork, doctor.</span></div>
+<div class="row"><span><b>Enjoyable.</b> Done for pleasure or meaning. Not a reward for "after everything".</span></div>
 
-<h2>Правила</h2>
-<div class="row"><span>Оценивай сразу после дела, первое число, которое пришло в голову.</span></div>
-<div class="row"><span>Сомневаешься между двумя цифрами, бери меньшую.</span></div>
-<div class="row"><span>Нули при депрессии ожидаемы. Важна динамика за недели, а не отдельный день.</span></div>
-<div class="row"><span>Сдвиг настроения равен «после» минус «до».</span></div>
-<div class="row"><span>Каждый день минимум одно «Приятное».</span></div>
+<h2>Rules</h2>
+<div class="row"><span>Rate right after the activity, using the first number that comes to mind.</span></div>
+<div class="row"><span>If torn between two numbers, pick the lower one.</span></div>
+<div class="row"><span>Zeros are expected in depression. Trends over weeks matter, not a single day.</span></div>
+<div class="row"><span>Mood shift equals "after" minus "before".</span></div>
+<div class="row"><span>At least one Enjoyable activity every day.</span></div>
 </div>
 
 <script>
-var L=['Рутина','Обязательное','Приятное'];
-var CL={'Рутина':'t1','Обязательное':'t2','Приятное':'t3'};
+var L=['Routine','Obligations','Enjoyable'];
+var CL={'Routine':'t1','Obligations':'t2','Enjoyable':'t3'};
+var MAP={'Рутина':'Routine','Обязательное':'Obligations','Приятное':'Enjoyable'};
 var KEY='layers_tracker';
 var store=[];
 try{store=JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){store=[]}
+var migrated=false;
+store.forEach(function(e){if(MAP[e.layer]){e.layer=MAP[e.layer];migrated=true}});
 function save(){try{localStorage.setItem(KEY,JSON.stringify(store))}catch(e){}}
+if(migrated)save();
 var st={layer:null,mb:null,ma:null,p:null,s:null,done:1};
 
 function seg(id,vals,labels,key){
@@ -159,7 +163,7 @@ el.appendChild(b);
 }
 seg('layer',L,L,'layer');
 ['mb','ma','p','s'].forEach(function(k){seg(k,[0,1,2,3],['0','1','2','3'],k)});
-seg('done',[1,0],['Сделано','В плане'],'done');
+seg('done',[1,0],['Done','Planned'],'done');
 
 function esc(t){var d=document.createElement('div');d.textContent=t;return d.innerHTML}
 function tag(l){return '<span class="tag '+CL[l]+'">'+l+'</span>'}
@@ -172,26 +176,26 @@ var td=store.filter(function(e){return new Date(e.t).toDateString()===today});
 var lh='';
 td.forEach(function(e){
 var parts=[];
-if(e.mb!==null||e.ma!==null)parts.push('настроение '+(e.mb===null?'?':e.mb)+' → '+(e.ma===null?'?':e.ma));
-if(e.p!==null)parts.push('удовольствие '+e.p);
-if(e.s!==null)parts.push('значимость '+e.s);
-lh+='<div class="it"><div>'+tag(e.layer)+esc(e.name)+'</div><div class="sm" style="margin:4px 0">'+(parts.join(' · ')||'без оценок')+'</div><button class="ib" data-t="'+e.id+'">'+(e.done?'Сделано':'В плане')+'</button> <button class="ib" data-d="'+e.id+'" aria-label="Удалить">Удалить</button></div>';
+if(e.mb!==null||e.ma!==null)parts.push('mood '+(e.mb===null?'?':e.mb)+' → '+(e.ma===null?'?':e.ma));
+if(e.p!==null)parts.push('pleasure '+e.p);
+if(e.s!==null)parts.push('importance '+e.s);
+lh+='<div class="it"><div>'+tag(e.layer)+esc(e.name)+'</div><div class="sm" style="margin:4px 0">'+(parts.join(' · ')||'no ratings')+'</div><button class="ib" data-t="'+e.id+'">'+(e.done?'Done':'Planned')+'</button> <button class="ib" data-d="'+e.id+'" aria-label="Delete">Delete</button></div>';
 });
-document.getElementById('list').innerHTML=lh||'<div class="sm">Записей на сегодня нет.</div>';
+document.getElementById('list').innerHTML=lh||'<div class="sm">No entries for today.</div>';
 var wk=store.filter(function(e){return Date.now()-e.t<7*86400000});
-var sh='<div class="sumrow sm" style="padding-bottom:6px"><div>Слой</div><div>Сделано</div><div>Удов.</div><div>Сдвиг</div></div>';
+var sh='<div class="sumrow sm" style="padding-bottom:6px"><div>Layer</div><div>Done</div><div>Pleas.</div><div>Shift</div></div>';
 L.forEach(function(l){
 var a=wk.filter(function(e){return e.layer===l});
 var dn=a.filter(function(e){return e.done}).length;
 var sf=a.filter(function(e){return e.mb!==null&&e.ma!==null}).map(function(e){return e.ma-e.mb});
-sh+='<div class="it sumrow"><div>'+tag(l)+'</div><div class="sm">'+dn+' из '+a.length+'</div><div class="sm">'+fmt(av(a.map(function(e){return e.p})))+'</div><div class="sm">'+fmt(av(sf),true)+'</div></div>';
+sh+='<div class="it sumrow"><div>'+tag(l)+'</div><div class="sm">'+dn+' of '+a.length+'</div><div class="sm">'+fmt(av(a.map(function(e){return e.p})))+'</div><div class="sm">'+fmt(av(sf),true)+'</div></div>';
 });
 document.getElementById('sum').innerHTML=sh;
 var miss=L.filter(function(l){return !td.some(function(e){return e.layer===l})});
 var h;
-if(miss.indexOf('Приятное')>-1)h='На сегодня нет ни одного приятного дела. Добавь хотя бы одно.';
-else if(miss.length)h='Не хватает слоя: '+miss.join(', ')+'.';
-else h='Все три слоя на сегодня есть.';
+if(miss.indexOf('Enjoyable')>-1)h='No enjoyable activity today. Add at least one.';
+else if(miss.length)h='Missing layer: '+miss.join(', ')+'.';
+else h='All three layers are covered today.';
 document.getElementById('hint').textContent=h;
 }
 
@@ -207,8 +211,8 @@ document.getElementById('name').addEventListener('input',function(){document.get
 document.getElementById('add').addEventListener('click',function(){
 var n=document.getElementById('name').value.trim();
 var er=document.getElementById('err');
-if(!st.layer){er.textContent='Выбери слой';return}
-if(!n){er.textContent='Впиши название дела';return}
+if(!st.layer){er.textContent='Choose a layer';return}
+if(!n){er.textContent='Enter an activity name';return}
 var now=Date.now();
 store.push({id:now,t:now,layer:st.layer,name:n,done:st.done,mb:st.mb,ma:st.ma,p:st.p,s:st.s});
 save();
@@ -222,7 +226,7 @@ function pad(n){return n<10?'0'+n:''+n}
 function fd(t){var d=new Date(t);return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+' '+pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds())}
 function q(v){return '"'+String(v).replace(/"/g,'""')+'"'}
 document.getElementById('exp').addEventListener('click',function(){
-var rows=[['Дата','Слой','Дело','Сделано','Настроение до','Настроение после','Удовольствие','Значимость']];
+var rows=[['Date','Layer','Activity','Done','Mood before','Mood after','Pleasure','Importance']];
 store.slice().sort(function(a,b){return a.t-b.t}).forEach(function(e){
 rows.push([fd(e.t),e.layer,e.name,e.done,e.mb===null?'':e.mb,e.ma===null?'':e.ma,e.p===null?'':e.p,e.s===null?'':e.s]);
 });
@@ -231,9 +235,9 @@ var blob=new Blob([csv],{type:'text/csv;charset=utf-8'});
 var a=document.createElement('a');
 a.href=URL.createObjectURL(blob);
 var d=new Date();
-a.download='sloi_'+d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'.csv';
+a.download='layers_'+d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'.csv';
 document.body.appendChild(a);a.click();document.body.removeChild(a);
-document.getElementById('msg').textContent='Экспортировано записей: '+store.length+'.';
+document.getElementById('msg').textContent='Exported entries: '+store.length+'.';
 });
 
 function parseCSV(text){
@@ -263,16 +267,17 @@ var seen={};
 store.forEach(function(e){seen[Math.floor(e.t/1000)+'|'+e.layer+'|'+e.name]=1});
 rows.forEach(function(x){
 var m=/^(\d{4})-(\d\d)-(\d\d)(?:[ T](\d\d):(\d\d)(?::(\d\d))?)?/.exec((x[0]||'').trim());
-if(!m||L.indexOf(x[1])<0||!x[2]){skipped++;return}
+var lay=MAP[x[1]]||x[1];
+if(!m||L.indexOf(lay)<0||!x[2]){skipped++;return}
 var t=new Date(+m[1],+m[2]-1,+m[3],+(m[4]||0),+(m[5]||0),+(m[6]||0)).getTime();
-var k=Math.floor(t/1000)+'|'+x[1]+'|'+x[2];
+var k=Math.floor(t/1000)+'|'+lay+'|'+x[2];
 if(seen[k]){skipped++;return}
 seen[k]=1;
-store.push({id:t,t:t,layer:x[1],name:x[2],done:(x[3]==='1'||x[3]==='true')?1:0,mb:num(x[4]),ma:num(x[5]),p:num(x[6]),s:num(x[7])});
+store.push({id:t,t:t,layer:lay,name:x[2],done:(x[3]==='1'||x[3]==='true')?1:0,mb:num(x[4]),ma:num(x[5]),p:num(x[6]),s:num(x[7])});
 added++;
 });
 save();render();
-document.getElementById('msg').textContent='Импорт: добавлено '+added+', пропущено '+skipped+'.';
+document.getElementById('msg').textContent='Import: added '+added+', skipped '+skipped+'.';
 ev.target.value='';
 };
 r.readAsText(f,'utf-8');
