@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,6 +23,8 @@ h1{font-size:20px;font-weight:500;margin:0}
 .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
 .card{background:var(--card);border:0.5px solid var(--bd);border-radius:12px;padding:12px;margin-bottom:12px}
 .h{font-size:15px;font-weight:500;margin:0 0 4px}
+.grp{font-size:13px;font-weight:500;margin:14px 0 2px}
+.grp:first-child{margin-top:0}
 .lbl{font-size:13px;color:var(--mut);margin:10px 0 4px}
 .sm{font-size:13px;color:var(--mut)}
 .g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 12px}
@@ -112,6 +113,11 @@ input[type=date]{color-scheme:light dark}
 <div id="list"></div>
 </div>
 
+<div class="card" id="otherCard" style="display:none">
+<p class="h">Planned on other days</p>
+<div id="other"></div>
+</div>
+
 <div class="card">
 <p class="h">Last 7 days</p>
 <div id="sum"></div>
@@ -186,6 +192,7 @@ input[type=date]{color-scheme:light dark}
 <div class="row"><span>Mood shift equals "after" minus "before".</span></div>
 <div class="row"><span>At least one Enjoyable activity every day.</span></div>
 <div class="row"><span>Tap Edit on any entry to set or change its ratings later.</span></div>
+<div class="row"><span>Planned entries stay in the Planned list until you tap Mark done.</span></div>
 </div>
 
 <script>
@@ -341,7 +348,7 @@ h+='</div></div>';
 return h;
 }
 
-function entryHTML(e){
+function entryHTML(e,showDate){
 var parts=[];
 
 if(e.mb!==null||e.ma!==null)
@@ -350,9 +357,15 @@ parts.push('mood '+(e.mb===null?'?':e.mb)+' → '+(e.ma===null?'?':e.ma));
 if(e.p!==null)parts.push('pleasure '+e.p);
 if(e.s!==null)parts.push('importance '+e.s);
 
-var h='<div class="it"><div>'+tag(e.layer)+esc(e.name)+'</div>';
+var h='<div class="it">';
+
+if(showDate){
+h+='<div class="sm">'+fwd(e.t)+(e.t<sod(Date.now())?' · overdue':' · upcoming')+'</div>';
+}
+
+h+='<div>'+tag(e.layer)+esc(e.name)+'</div>';
 h+='<div class="sm" style="margin:4px 0">'+(parts.join(' · ')||'no ratings')+'</div>';
-h+='<div class="acts"><button class="ib" data-t="'+e.id+'">'+(e.done?'Done':'Planned')+'</button>';
+h+='<div class="acts"><button class="ib" data-t="'+e.id+'">'+(e.done?'Mark planned':'Mark done')+'</button>';
 h+='<button class="ib" data-x="'+e.id+'">'+(openE[e.id]?'Close':'Edit')+'</button>';
 h+='<button class="ib" data-d="'+e.id+'" aria-label="Delete">Delete</button></div>';
 
@@ -361,11 +374,30 @@ if(openE[e.id])h+=editor(e);
 return h+'</div>';
 }
 
+function grouped(es){
+var pl=es.filter(function(e){return !e.done});
+var dn=es.filter(function(e){return e.done});
+
+var h='<div class="grp">Planned ('+pl.length+')</div>';
+h+=pl.map(function(e){return entryHTML(e)}).join('')||'<div class="sm">Nothing planned.</div>';
+h+='<div class="grp">Done ('+dn.length+')</div>';
+h+=dn.map(function(e){return entryHTML(e)}).join('')||'<div class="sm">Nothing done yet.</div>';
+
+return h;
+}
+
 function render(){
 var a=sod(Date.now()),b=addDays(a,1);
 var td=inR(a,b);
 
-document.getElementById('list').innerHTML=td.map(entryHTML).join('')||'<div class="sm">No entries for today.</div>';
+document.getElementById('list').innerHTML=grouped(td);
+
+var oth=store.filter(function(e){
+return !e.done&&(e.t<a||e.t>=b);
+}).sort(function(x,y){return x.t-y.t});
+
+document.getElementById('otherCard').style.display=oth.length?'block':'none';
+document.getElementById('other').innerHTML=oth.map(function(e){return entryHTML(e,true)}).join('');
 
 var wk=store.filter(function(e){return Date.now()-e.t<7*86400000&&e.t<=Date.now()});
 
@@ -410,7 +442,7 @@ var es=inR(a,b),s=stats(es);
 
 var h='<div class="sm" style="margin-bottom:8px">Done '+s.dn+' of '+s.n+' · pleasure '+fmt(s.p)+' · shift '+fmt(s.sh,true)+' · importance '+fmt(s.s)+'</div>';
 
-h+=es.map(entryHTML).join('')||'<div class="sm">No entries for this day.</div>';
+h+=grouped(es);
 body.innerHTML=h;
 
 }else{
@@ -487,6 +519,7 @@ renderAll();
 }
 
 document.getElementById('list').addEventListener('click',onClick);
+document.getElementById('other').addEventListener('click',onClick);
 
 document.getElementById('hbody').addEventListener('click',function(ev){
 var dr=ev.target.closest('[data-day]');
