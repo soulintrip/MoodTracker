@@ -13,9 +13,9 @@
 <title>Day Layers</title>
 
 <style>
-:root{--bg:#faf9f5;--fg:#1f1e1d;--mut:#6b6a66;--bd:#d9d7cf;--card:#fff;--err:#b3261e;
+:root{--bg:#faf9f5;--fg:#1f1e1d;--mut:#6b6a66;--bd:#d9d7cf;--bd2:#a9a69b;--card:#fff;--err:#b3261e;
 --b1:#dbe9f8;--f1:#0c447c;--b2:#fbe6d3;--f2:#8a3d0c;--b3:#dcefc9;--f3:#27500a}
-@media(prefers-color-scheme:dark){:root{--bg:#1f1e1d;--fg:#f0eee6;--mut:#a3a199;--bd:#3d3b37;--card:#2a2927;--err:#f2b8b5;
+@media(prefers-color-scheme:dark){:root{--bg:#1f1e1d;--fg:#f0eee6;--mut:#a3a199;--bd:#3d3b37;--bd2:#6b6860;--card:#2a2927;--err:#f2b8b5;
 --b1:#0c447c;--f1:#b5d4f4;--b2:#712b13;--f2:#f5c4b3;--b3:#27500a;--f3:#c0dd97}}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;padding:12px;padding-bottom:40px;max-width:480px;margin:0 auto}
@@ -27,10 +27,14 @@ h1{font-size:20px;font-weight:500;margin:0}
 .grp:first-child{margin-top:0}
 .lbl{font-size:13px;color:var(--mut);margin:10px 0 4px}
 .sm{font-size:13px;color:var(--mut)}
-.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 12px}
+.gb{border:1px solid var(--bd2);border-radius:10px;background:var(--bg);padding:8px 10px 10px;margin-top:12px}
+.gl{font-size:13px;font-weight:500;color:var(--fg);margin:0 0 8px}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 10px;margin-top:12px}
+.g2 .gb{margin-top:0;padding:8px 8px 10px}
+.g2 .seg,.ed .seg{gap:4px}
 .seg{display:flex;gap:6px}
 button{font:inherit;color:var(--fg);background:transparent;border:0.5px solid var(--bd);border-radius:8px;padding:6px 10px;min-height:36px;cursor:pointer}
-.seg button{flex:1;padding:6px 2px;font-size:14px}
+.seg button{flex:1;padding:6px 2px;font-size:14px;border:0.5px solid var(--bd2);background:var(--card)}
 .seg button.on{background:var(--fg);color:var(--bg);border-color:var(--fg)}
 input[type=text],input[type=date]{width:100%;font:inherit;font-size:16px;color:var(--fg);background:transparent;border:0.5px solid var(--bd);border-radius:8px;padding:8px 10px;min-height:40px}
 input[type=date]{color-scheme:light dark}
@@ -43,12 +47,18 @@ input[type=date]{color-scheme:light dark}
 .sumrow{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) minmax(0,1fr) minmax(0,1fr);gap:6px;align-items:center}
 .sumrow5{display:grid;grid-template-columns:minmax(0,1.5fr) repeat(4,minmax(0,1fr));gap:6px;align-items:center}
 .acts{display:flex;gap:8px;flex-wrap:wrap}
-.ed{margin-top:8px;padding:8px 10px;border:0.5px solid var(--bd);border-radius:8px}
-.ed .lbl:first-child{margin-top:0}
+.ed{margin-top:10px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.ed .gb{margin-top:0;padding:8px 8px 10px}
+.ed .gb:last-child{grid-column:1/-1}
 .nav{display:flex;align-items:center;gap:8px;margin:12px 0}
 .nav button{min-width:44px;font-size:18px}
 .nav .lab{flex:1;text-align:center;font-weight:500;font-size:15px;border:none;background:transparent;min-height:36px}
 .dayrow{display:flex;justify-content:space-between;align-items:center;cursor:pointer;min-height:40px}
+.tabs{margin:8px 0}
+.sl{animation:sl .2s ease-out}
+.sr{animation:sr .2s ease-out}
+@keyframes sl{from{transform:translateX(28px);opacity:0}to{transform:none;opacity:1}}
+@keyframes sr{from{transform:translateX(-28px);opacity:0}to{transform:none;opacity:1}}
 #ov{position:fixed;inset:0;background:rgba(0,0,0,.4);opacity:0;pointer-events:none;transition:opacity .2s;z-index:10}
 #ov.open{opacity:1;pointer-events:auto}
 .drawer{position:fixed;top:0;right:0;bottom:0;width:min(92vw,420px);background:var(--bg);border-left:0.5px solid var(--bd);transform:translateX(100%);transition:transform .25s;z-index:11;overflow-y:auto;padding:16px;padding-bottom:40px}
@@ -74,42 +84,52 @@ input[type=date]{color-scheme:light dark}
 <div class="card">
 <p class="h">Add activity</p>
 
-<div class="lbl">Layer</div>
+<div class="gb">
+<div class="gl">Layer</div>
 <div class="seg" id="layer"></div>
+</div>
 
-<div class="lbl">Activity</div>
+<div class="lbl" style="margin-top:14px">Activity</div>
 <input type="text" id="name" placeholder="For example, 15-minute walk">
 
 <div class="lbl">Date</div>
 <input type="date" id="activityDate">
 
 <div class="g2">
-<div>
-<div class="lbl">Mood before</div>
+<div class="gb">
+<div class="gl">Mood before</div>
 <div class="seg" id="mb"></div>
 </div>
-<div>
-<div class="lbl">Mood after</div>
+<div class="gb">
+<div class="gl">Mood after</div>
 <div class="seg" id="ma"></div>
 </div>
-<div>
-<div class="lbl">Pleasure</div>
+<div class="gb">
+<div class="gl">Pleasure</div>
 <div class="seg" id="p"></div>
 </div>
-<div>
-<div class="lbl">Importance</div>
+<div class="gb">
+<div class="gl">Importance</div>
 <div class="seg" id="s"></div>
 </div>
 </div>
 
-<div class="lbl">Status</div>
+<div class="gb">
+<div class="gl">Status</div>
 <div class="seg" id="done"></div>
+</div>
+
 <div class="err" id="err"></div>
 <button id="add" style="width:100%">Save</button>
 </div>
 
-<div class="card">
+<div class="card" id="todayCard">
 <p class="h">Today</p>
+<div class="seg tabs" id="tabs">
+<button id="tabP">Planned (0)</button>
+<button id="tabD">Done (0)</button>
+</div>
+<div class="sm" style="margin-bottom:4px">Swipe left or right here to switch.</div>
 <div id="list"></div>
 </div>
 
@@ -131,7 +151,7 @@ input[type=date]{color-scheme:light dark}
 <button id="imp">Import CSV</button>
 </div>
 <input type="file" id="file" accept=".csv,text/csv" style="display:none">
-<div class="sm" id="msg" style="margin-top:8px">Data is stored only in this browser. Export once a week as a backup. Swipe left for history.</div>
+<div class="sm" id="msg" style="margin-top:8px">Data is stored only in this browser. Export once a week as a backup. Swipe left outside the Today block for history.</div>
 </div>
 
 <div id="ov"></div>
@@ -193,6 +213,7 @@ input[type=date]{color-scheme:light dark}
 <div class="row"><span>At least one Enjoyable activity every day.</span></div>
 <div class="row"><span>Tap Edit on any entry to set or change its ratings later.</span></div>
 <div class="row"><span>Planned entries stay in the Planned list until you tap Mark done.</span></div>
+<div class="row"><span>In the Today block, swipe left or right to switch between Planned and Done.</span></div>
 </div>
 
 <script>
@@ -225,6 +246,7 @@ var st={layer:null,mb:null,ma:null,p:null,s:null,done:1};
 var openE={};
 var hv='day';
 var hd=sod(Date.now());
+var pane=0;
 
 function localDateString(t){
 var d=new Date(t);
@@ -331,20 +353,20 @@ var rows=[['mb','Mood before'],['ma','Mood after'],['p','Pleasure'],['s','Import
 var h='<div class="ed">';
 
 rows.forEach(function(r){
-h+='<div class="lbl">'+r[1]+'</div><div class="seg">';
+h+='<div class="gb"><div class="gl">'+r[1]+'</div><div class="seg">';
 [0,1,2,3].forEach(function(v){
 h+='<button data-e="'+e.id+'" data-k="'+r[0]+'" data-v="'+v+'"'+(e[r[0]]===v?' class="on"':'')+'>'+v+'</button>';
 });
-h+='</div>';
+h+='</div></div>';
 });
 
-h+='<div class="lbl">Status</div><div class="seg">';
+h+='<div class="gb"><div class="gl">Status</div><div class="seg">';
 
 [[1,'Done'],[0,'Planned']].forEach(function(o){
 h+='<button data-e="'+e.id+'" data-k="done" data-v="'+o[0]+'"'+((e.done?1:0)===o[0]?' class="on"':'')+'>'+o[1]+'</button>';
 });
 
-h+='</div></div>';
+h+='</div></div></div>';
 return h;
 }
 
@@ -390,7 +412,16 @@ function render(){
 var a=sod(Date.now()),b=addDays(a,1);
 var td=inR(a,b);
 
-document.getElementById('list').innerHTML=grouped(td);
+var pl=td.filter(function(e){return !e.done});
+var dn=td.filter(function(e){return e.done});
+
+document.getElementById('tabP').textContent='Planned ('+pl.length+')';
+document.getElementById('tabD').textContent='Done ('+dn.length+')';
+document.getElementById('tabP').className=pane===0?'on':'';
+document.getElementById('tabD').className=pane===1?'on':'';
+
+var cur=pane===0?pl:dn;
+document.getElementById('list').innerHTML=cur.map(function(e){return entryHTML(e)}).join('')||'<div class="sm">'+(pane===0?'Nothing planned today.':'Nothing done yet today.')+'</div>';
 
 var oth=store.filter(function(e){
 return !e.done&&(e.t<a||e.t>=b);
@@ -425,6 +456,37 @@ h='All three layers are covered today.';
 
 document.getElementById('hint').textContent=h;
 }
+
+function setPane(n){
+if(n===pane)return;
+var dir=n>pane?'sl':'sr';
+pane=n;
+render();
+var l=document.getElementById('list');
+l.classList.remove('sl','sr');
+void l.offsetWidth;
+l.classList.add(dir);
+}
+
+document.getElementById('tabP').addEventListener('click',function(){setPane(0)});
+document.getElementById('tabD').addEventListener('click',function(){setPane(1)});
+
+var tc=document.getElementById('todayCard');
+var tx=0,ty=0;
+
+tc.addEventListener('touchstart',function(e){
+tx=e.touches[0].clientX;
+ty=e.touches[0].clientY;
+},{passive:true});
+
+tc.addEventListener('touchend',function(e){
+e.stopPropagation();
+var dx=e.changedTouches[0].clientX-tx;
+var dy=e.changedTouches[0].clientY-ty;
+if(Math.abs(dy)>60||Math.abs(dx)<50)return;
+if(dx<0)setPane(1);
+else setPane(0);
+},{passive:true});
 
 function renderHist(){
 var body=document.getElementById('hbody');
